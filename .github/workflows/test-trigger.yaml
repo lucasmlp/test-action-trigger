@@ -1,0 +1,33 @@
+name: PR Approved Workflow
+
+on:
+  pull_request_target:
+    types:
+      - review_requested
+      - review
+
+jobs:
+  checkApproval:
+    runs-on: ubuntu-latest
+    outputs:
+      approved: ${{ steps.check.outputs.approved }}
+    steps:
+      - name: Check if PR is approved
+        id: check
+        run: |
+          APPROVED=$(gh pr review --list ${{ github.event.pull_request.number }} | grep APPROVED)
+          if [[ -z "$APPROVED" ]]; then
+            echo "::set-output name=approved::false"
+          else
+            echo "::set-output name=approved::true"
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  runOnApproval:
+    needs: checkApproval
+    if: needs.checkApproval.outputs.approved == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Job for approved PR
+        run: echo "This runs only if the PR is approved."
