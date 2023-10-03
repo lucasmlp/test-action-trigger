@@ -1,1 +1,14 @@
 name: Sync Container Registries
+
+on:
+  pull_request_target:
+    types:
+      - labeled
+
+jobs:
+  onLabel:
+    runs-on: ubuntu-latest
+    if: github.event.label.name == 'regsync-ready'
+    steps:
+      - name: Do something
+        run: echo "Label regsync-ready was added!"
