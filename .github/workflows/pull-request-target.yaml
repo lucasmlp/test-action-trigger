@@ -3,12 +3,18 @@ name: Pull Request Target Workflow
 on:
   pull_request_target:
 
+env:
+  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 jobs:
   print-details:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout code
+    - name: Checkout base branch
       uses: actions/checkout@v2
+
+    - name: Checkout PR
+      run: gh pr checkout ${{ github.event.pull_request.number }}
 
     - name: Print branch details
       run: |
