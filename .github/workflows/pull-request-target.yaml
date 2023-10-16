@@ -8,21 +8,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout base branch
-      uses: actions/checkout@v2
-      with:
-        ref: ${{ github.event.pull_request.base.ref }}
+      uses: actions/checkout@v3
 
-    - name: Try merging PR changes
-      run: |
-        git fetch origin ${{ github.event.pull_request.head.ref }}
-        git merge ${{ github.event.pull_request.head.sha }} --no-commit --no-ff
-      continue-on-error: true
-
-    - name: Check for merge conflicts
-      if: steps.previous_step_name.outcome == 'failure' # Replace 'previous_step_name' with the actual step ID of the merge step
-      run: |
-        echo "Merge conflict detected. Exiting."
-        exit 1
+    - name: Check out PR
+      run: gh pr checkout ${{ github.event.pull_request.number }}
 
     - name: Print branch details
       run: |
