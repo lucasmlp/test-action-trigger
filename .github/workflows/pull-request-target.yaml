@@ -7,8 +7,13 @@ jobs:
   print-details:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout code
+    - name: Checkout base branch
       uses: actions/checkout@v2
+      with:
+        ref: ${{ github.event.pull_request.base.ref }}
+
+    - name: Try merging PR changes
+      run: gh pr checkout ${{ github.event.pull_request.number }}
 
     - name: Print branch details
       run: |
