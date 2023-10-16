@@ -1,0 +1,17 @@
+name: Pull Request Workflow
+
+on:
+  pull_request:
+
+jobs:
+  print-details:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Print branch details
+      run: |
+        echo "Workflow Branch: ${{ github.ref }}"
+        echo "Checked out branch: $(git rev-parse --abbrev-ref HEAD)"
+        echo "This workflow has the pull_request trigger"
