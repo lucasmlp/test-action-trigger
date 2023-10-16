@@ -21,3 +21,9 @@ jobs:
         echo "Workflow Branch: ${{ github.ref }}"
         echo "Checked out branch: $(git rev-parse --abbrev-ref HEAD)"
         echo "This workflow has the pull_request trigger"
+
+    - name: Print working directory hierarchy
+      run: |
+        sudo apt-get install -y tree
+        tree $(github.workspace)
+
